@@ -3,9 +3,17 @@ const quoteDisplayElement = document.getElementById('quoteDisplay')
 const quoteInputElement = document.getElementById('quoteInput')
 const timerElement = document.getElementById('timer')
 
+let startTime
+let timerInterval
+
 quoteInputElement.addEventListener('input', () => {
   const arrayQuote = quoteDisplayElement.querySelectorAll('span')
   const arrayValue = quoteInputElement.value.split('')
+
+  // Start the timer on the first keystroke
+  if (!startTime) {
+    startTimer()
+  }
 
   let correct = true
   arrayQuote.forEach((characterSpan, index) => {
@@ -42,16 +50,21 @@ async function renderNewQuote() {
     quoteDisplayElement.appendChild(characterSpan)
   })
   quoteInputElement.value = null
-  startTimer()
+  resetTimer()
 }
 
-let startTime
 function startTimer() {
   timerElement.innerText = 0
   startTime = new Date()
-  setInterval(() => {
-    timer.innerText = getTimerTime()
+  timerInterval = setInterval(() => {
+    timerElement.innerText = getTimerTime()
   }, 1000)
+}
+
+function resetTimer() {
+  clearInterval(timerInterval)
+  timerElement.innerText = 0
+  startTime = null
 }
 
 function getTimerTime() {
